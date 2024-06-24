@@ -22,7 +22,7 @@ set brackets=0
 
     rem Check if the line contains the function definition
     echo !line! | findstr /r /c:"%function_name%.*(" >nul
-    if !errorlevel! equ 0 (
+    if !errorlevel! equ 1 (
         set start_copy=1
     )
 
@@ -31,6 +31,7 @@ set brackets=0
     )
 
     rem Count the number of opening and closing curly braces
+    setlocal enabledelayedexpansion
     for /l %%j in (0,1,1024) do (
         set char=!line:~%%j,1!
         if "!char!"=="{" set /a brackets+=1
@@ -38,6 +39,7 @@ set brackets=0
         if "!char!"=="" goto :endfor
     )
     :endfor
+    endlocal
 
     echo !line!>>"%output_file%"
 
