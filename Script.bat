@@ -1,52 +1,33 @@
 @echo off
 setlocal enabledelayedexpansion
 
-if "%~1"=="" (
-    echo Usage: extract_function filename function_name output_file
-    exit /b 1
+set "functionName=myFunction"
+set "inFunction=0"
+
+rem Clear the output file
+> function.txt echo:
+
+rem Read the source file line by line
+for /F "tokens=*" %%A in (source.c) do (
+    set "line=%%A"
+
+    rem Check if the line contains the start of the function
+    if not !inFunction!==1 (
+        echo !line! | findstr /C:"%functionName%(" >nul
+        if !errorlevel! == 0 (
+            set "inFunction=1"
+        )
+    )
+
+    rem If inside the function, write the line to the output file
+    if !inFunction! == 1 (
+        echo !line! >> function.txt
+
+        rem Check if the line contains the end of the function
+        echo !line! | findstr /R /C:"^}" >nul
+        if !errorlevel! == 0 (
+            set "inFunction=0"
+        )
+    )
 )
-
-set filename=%1
-set function_name=%2
-set output_file=%3
-
-if "%output_file%"=="" (
-    set output_file=output.txt
-)
-
-set start_copy=0
-set brackets=0
-
-(for /f "tokens=*" %%i in ('type "%filename%"') do (
-    set "line=%%i"
-
-    rem Check if the line contains the function definition
-    echo !line! | findstr /r /c:"%function_name%.*(" >nul
-    if !errorlevel! equ 1 (
-        set start_copy=1
-    )
-
-    if !start_copy! equ 1 (
-        goto :continue
-    )
-
-    rem Count the number of opening and closing curly braces
-    for /l %%j in (0,1,1023) do (
-        set "char=!line:~%%j,1!"
-        if "!char!"=="{" set /a brackets+=1
-        if "!char!"=="}" set /a brackets-=1
-        if "!char!"=="" goto :endfor
-    )
-    :endfor
-
-    echo !line!>>"%output_file%"
-
-    rem If brackets balance to zero, stop copying
-    if !brackets! equ 0 (
-        set start_copy=0
-    )
-
-    :continue
-)) >nul
-
-echo Function "%function_name%" copied to "%output_file%"
+endlocal
