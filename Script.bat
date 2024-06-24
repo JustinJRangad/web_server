@@ -18,7 +18,7 @@ set start_copy=0
 set brackets=0
 
 (for /f "tokens=*" %%i in ('type "%filename%"') do (
-    set line=%%i
+    set "line=%%i"
 
     rem Check if the line contains the function definition
     echo !line! | findstr /r /c:"%function_name%.*(" >nul
@@ -31,15 +31,13 @@ set brackets=0
     )
 
     rem Count the number of opening and closing curly braces
-    setlocal enabledelayedexpansion
-    for /l %%j in (0,1,1024) do (
-        set char=!line:~%%j,1!
+    for /l %%j in (0,1,1023) do (
+        set "char=!line:~%%j,1!"
         if "!char!"=="{" set /a brackets+=1
         if "!char!"=="}" set /a brackets-=1
         if "!char!"=="" goto :endfor
     )
     :endfor
-    endlocal
 
     echo !line!>>"%output_file%"
 
