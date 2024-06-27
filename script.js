@@ -25,11 +25,4 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             })
             .catch(error => {
-                console.error('Error fetching function code:', error);
-                const codeContainer = document.getElementById('code');
-                codeContainer.textContent = 'Error fetching function code.';
-            });
-    } else {
-        console.error('File name or function name parameter is missing.');
-    }
-});
+                console.error('Error fetching function code
