@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coverage Report</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Function Code Display</title>
+    <style>
+        .lineNum {
+            display: inline-block;
+            width: 30px;
+            user-select: none;
+        }
+        .codeLine {
+            display: block;
+            white-space: pre; /* Preserve whitespace */
+        }
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
-    <div id="content">
-        <h1>Coverage Report</h1>
-        <table id="coverage-table">
-            <thead>
-                <tr>
-                    <th>Address</th>
-                    <th>Status</th>
-                    <th>Instruction</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+    <div id="code-container">
+        <pre id="code"></pre>
     </div>
-    <script src="script.js"></script>
+
+    <script src="function-details.js"></script>
 </body>
 </html>
