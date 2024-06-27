@@ -1,36 +1,35 @@
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('coverage.json')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.querySelector('#coverage-table tbody');
-            Object.keys(data).forEach(address => {
-                const row = document.createElement('tr');
-                const addressCell = document.createElement('td');
-                const statusCell = document.createElement('td');
-                const instructionCell = document.createElement('td');
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileName = urlParams.get('file');
+    const functionName = urlParams.get('function');
 
-                addressCell.textContent = address;
-                statusCell.textContent = data[address];
-                instructionCell.textContent = disassembly[address];
-
-                if (data[address] === 'executed') {
-                    row.classList.add('executed');
-                } else {
-                    row.classList.add('not-executed');
+    if (fileName && functionName) {
+        document.getElementById('file-name').textContent = `File: ${fileName}`;
+        document.getElementById('function-name').textContent = `Function: ${functionName}`;
+        
+        fetch(`/get_function_code?file=${encodeURIComponent(fileName)}&function=${encodeURIComponent(functionName)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
                 }
-
-                row.appendChild(addressCell);
-                row.appendChild(statusCell);
-                row.appendChild(instructionCell);
-                tableBody.appendChild(row);
+                return response.text();
+            })
+            .then(text => {
+                const codeContainer = document.getElementById('code');
+                const lines = text.split('\n');
+                lines.forEach((line, index) => {
+                    const lineElement = document.createElement('span');
+                    lineElement.className = 'codeLine';
+                    lineElement.innerHTML = `<span class="lineNum">${index + 1}</span> ${line}`;
+                    codeContainer.appendChild(lineElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching function code:', error);
+                const codeContainer = document.getElementById('code');
+                codeContainer.textContent = 'Error fetching function code.';
             });
-        })
-        .catch(error => console.error('Error loading coverage data:', error));
+    } else {
+        console.error('File name or function name parameter is missing.');
+    }
 });
-
-// Dummy disassembly data for demonstration purposes
-const disassembly = {
-    "08000000": "ldr r3, [pc, #20]",
-    "08000004": "add r0, r1, r2",
-    // Add more instructions as needed
-};
