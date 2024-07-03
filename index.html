@@ -3,52 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Function Code Display</title>
+    <title>Image Display</title>
     <style>
         body {
             font-family: Arial, sans-serif;
         }
-        #code-container {
-            background-color: #ffffff; /* Background color for the container */
-            padding: 10px;
-            border: 1px solid #ccc; /* Optional: border around the container */
-            border-radius: 5px; /* Optional: rounded corners for the container */
-            max-width: 80%; /* Optional: limit the width of the container */
-            margin: 20px auto; /* Center the container on the page */
+        .image-container {
+            display: flex;
+            justify-content: center; /* Center the images horizontally */
+            gap: 20px; /* Add space between the images */
         }
-        .lineNum {
-            display: inline-block;
-            width: 30px;
-            user-select: none;
-        }
-        .codeLine {
-            display: block;
-            white-space: pre; /* Preserve whitespace */
-            margin: 0; /* Remove margin */
-        }
-        pre {
-            white-space: pre-wrap;
-            background-color: #f0f0f0; /* Set the background color here */
-            padding: 10px; /* Add some padding for better readability */
-            border-radius: 5px; /* Optional: rounded corners */
-            border: 1px solid #ccc; /* Optional: border around the code block */
-            margin: 0; /* Remove default margin */
-            overflow-x: auto; /* Enable horizontal scrolling if needed */
-        }
-        h3 {
-            margin-top: 5px;  /* Reduce the space above the heading */
-            margin-bottom: 5px;  /* Reduce the space below the heading */
-            padding: 0;  /* Ensure no padding */
-            font-size: 1.5em;  /* Adjust the font size as needed */
+        .image-container img {
+            max-width: 45%; /* Ensure the images fit within the container */
+            height: auto; /* Maintain aspect ratio */
+            border: 1px solid #ccc; /* Optional: Add border to images */
+            border-radius: 5px; /* Optional: Add rounded corners */
         }
     </style>
 </head>
 <body>
-    <div id="code-container">
-        <h3>Source Code</h3>
-        <pre id="code"></pre>
+    <div class="image-container" id="image-container">
+        <!-- Images will be inserted here by JavaScript -->
     </div>
-
-    <script src="function-details.js"></script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
